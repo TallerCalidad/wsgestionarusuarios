@@ -1,0 +1,123 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://uniajc.edu.co/users/web-service" targetNamespace="http://uniajc.edu.co/users/web-service"
+	elementFormDefault="qualified">
+
+	<xs:complexType name="usuario">
+		<xs:sequence>
+			<xs:element name="identificacion" minOccurs="1" nillable="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element type="xs:string" name="nombre" />
+			<xs:element type="xs:string" name="telefono" />
+			<xs:element type="tns:emailAddress" name="correo" />
+			<xs:element type="xs:string" name="direccion" />
+			<xs:element name="edad">
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="1" />
+						<xs:maxInclusive value="100" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:simpleType name="emailAddress">
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})" />
+		</xs:restriction>
+	</xs:simpleType>
+
+
+
+	<xs:complexType name="respuesta">
+		<xs:sequence>
+			<xs:element type="xs:int" name="codigo" />
+			<xs:element type="xs:string" name="respuesta" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="CreateUserRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element type="tns:usuario" name="usuario" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="CreateUserResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="respuesta" type="tns:respuesta" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="GetUserRequest">
+		<xs:complexType>
+			<xs:attribute name="identificacion" type="xs:string"
+				use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="GetUserResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="respuesta" type="tns:respuesta" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="GetAllUserRequest">
+		<xs:complexType>
+			<xs:sequence>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="GetAllUserResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="respuesta" type="tns:respuesta" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DeleteUserRequest">
+		<xs:complexType>
+			<xs:attribute name="identificacion" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DeleteUserResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="respuesta" type="tns:respuesta" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="UpdateUserRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="usuario" type="tns:usuario" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="UpdateUserResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="respuesta" type="tns:respuesta" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
