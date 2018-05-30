@@ -1,0 +1,110 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns:tns="http://spring.io/guides/gs-producing-web-service"
+           targetNamespace="http://spring.io/guides/gs-producing-web-service" 
+           elementFormDefault="qualified">
+           
+	
+	<xs:element name="GetDataApplicationRequest">
+		<xs:complexType>     
+			<!--<<xs:sequence> 
+				<xs:element type="xs:int" name="id_app" />
+			</xs:sequence>-->
+			  <xs:attribute name="id_app" type="xs:int" use="required"/>
+		</xs:complexType>
+		  
+	</xs:element>
+  
+	<xs:element name="GetDataApplicationResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="respuesta" type="tns:respuesta" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="GetAllDataApplicationRequest">
+		<xs:complexType>     
+			<xs:sequence> 
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+  
+	<xs:element name="GetAllDataApplicationResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="respuesta" type="tns:respuesta" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	
+	<xs:complexType name="respuesta">
+		<xs:sequence>
+			<xs:element type="xs:int" name="codigo" />
+			<xs:element type="xs:string" name="descripcion" />
+			<xs:element type="xs:string" name="respuesta" />
+		</xs:sequence> 
+	</xs:complexType>
+	
+	<xs:complexType name="applicationObj">
+		<xs:sequence>
+			<xs:element type="xs:int" name="id_app" />
+			<xs:element type="xs:string" name="nombre" />
+			<xs:element type="xs:string" name="fase_estado" />
+			<xs:element type="xs:string" name="estado" />
+			<xs:element type="xs:string" name="notas" />
+			<xs:element type="xs:string" name="password" />
+			<xs:element type="xs:string" name="version" />
+		</xs:sequence> 
+	</xs:complexType>
+	
+	
+	<xs:element name="DeleteDataApplicationRequest">
+		<xs:complexType>     
+			<xs:sequence> 
+				<xs:element type="xs:int" name="id_app" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+  
+	<xs:element name="DeleteDataApplicationResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="respuesta" type="tns:respuesta" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="CreateApplicationRequest">
+		<xs:complexType>     
+			<xs:sequence> 
+				<xs:element type="tns:applicationObj" name="applicationobj" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+  
+	<xs:element name="CreateApplicationResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="respuesta" type="tns:respuesta" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="UpdateApplicationRequest">
+		<xs:complexType>     
+			<xs:sequence> 
+				<xs:element type="tns:applicationObj" name="applicationobj" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+  
+	<xs:element name="UpdateApplicationResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="respuesta" type="tns:respuesta" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+    
+</xs:schema>

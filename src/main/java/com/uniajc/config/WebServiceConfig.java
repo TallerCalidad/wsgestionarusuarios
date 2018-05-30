@@ -2,13 +2,17 @@ package com.uniajc.config;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 
+import javax.sql.DataSource;
+
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -27,9 +31,10 @@ import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
 
-@Configuration
 @EnableWs
+@Configuration
 @ComponentScan("com.uniajc")
+// @PropertySource("classpath:sql.properties")
 @PropertySources({ @PropertySource("classpath:sql.properties"), @PropertySource("classpath:messages.properties") })
 public class WebServiceConfig extends WsConfigurerAdapter {
 	@Bean
@@ -40,12 +45,12 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 		return new ServletRegistrationBean(servlet, "/ws/*");
 	}
 
-	@Bean(name = "usuarios")
+	@Bean(name = "applications")
 	public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema applicationSchema) {
 		DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
-		wsdl11Definition.setPortTypeName("UsuarioPort");
+		wsdl11Definition.setPortTypeName("ApplicationsPort");
 		wsdl11Definition.setLocationUri("/ws");
-		wsdl11Definition.setTargetNamespace("http://uniajc.edu.co/users/web-service");
+		wsdl11Definition.setTargetNamespace("http://spring.io/guides/gs-producing-web-service");
 		wsdl11Definition.setSchema(applicationSchema);
 		wsdl11Definition.setCreateSoap12Binding(true);
 		wsdl11Definition.setCreateSoap11Binding(false);
@@ -54,9 +59,21 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 
 	@Bean
 	public XsdSchema applicationSchema() {
-		return new SimpleXsdSchema(new ClassPathResource("UsuarioService.xsd"));
+		return new SimpleXsdSchema(new ClassPathResource("ApplicationService.xsd"));
 	}
 
+	@Bean(name = "datasource1")
+	@Primary
+	@ConfigurationProperties(prefix = "spring.datasource")
+	public DataSource primaryDataSource() {
+		return DataSourceBuilder.create().build();
+	}
+
+	@Bean(name = "datasource2")
+	@ConfigurationProperties(prefix = "spring.secondDatasource")
+	public DataSource secondaryDataSource() {
+		return DataSourceBuilder.create().build();
+	}
 
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -82,7 +99,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 	@Bean
 	PayloadValidatingInterceptor payloadValidatingInterceptor() {
 		final PayloadValidatingInterceptor payloadValidatingInterceptor = new PayloadValidatingInterceptor();
-		payloadValidatingInterceptor.setSchema(new ClassPathResource("UsuarioService.xsd"));
+		payloadValidatingInterceptor.setSchema(new ClassPathResource("ApplicationService.xsd"));
 		return payloadValidatingInterceptor;
 	}
 
@@ -97,11 +114,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 	@Bean
 	SimplePasswordValidationCallbackHandler callbackHandler() {
 		SimplePasswordValidationCallbackHandler callbackHandler = new SimplePasswordValidationCallbackHandler();
-		//callbackHandler.setUsersMap(Collections.singletonMap("user", "password"))
-		Properties users= new Properties();
-		users.setProperty("fernando", "fc123");
-		users.setProperty("ronal", "rt123");
-		callbackHandler.setUsers(users);
+		callbackHandler.setUsersMap(Collections.singletonMap("user", "password"));
 		return callbackHandler;
 	}
 
@@ -111,11 +124,11 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 		interceptors.add(payloadValidatingInterceptor());
 		interceptors.add(securityInterceptor());
 		
-		/*PayloadValidatingInterceptor validatingInterceptor = new PayloadValidatingInterceptor();
+		PayloadValidatingInterceptor validatingInterceptor = new PayloadValidatingInterceptor();
 		validatingInterceptor.setValidateRequest(true);
 		validatingInterceptor.setValidateResponse(true);
 		validatingInterceptor.setXsdSchema(applicationSchema());
-		interceptors.add(validatingInterceptor);*/
+		interceptors.add(validatingInterceptor);
 	}
 
 }
